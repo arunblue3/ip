@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Buddy {
 
@@ -20,6 +20,8 @@ public class Buddy {
     public static void main(String[] args) {
         Buddy buddy = new Buddy();
         Scanner scanner = new Scanner(System.in);
+        ArrayList<String> tasks = new ArrayList<>();
+
 
         System.out.println(buddy.getGreeting());
 
@@ -31,7 +33,19 @@ public class Buddy {
                 break;
             }
 
-            System.out.println(buddy.barWrap(command));
+            else if (command.equals("list")){
+                String currList = "";
+                for (int i = 0; i < tasks.size(); i++){
+                    currList += i+1 + ". " + tasks.get(i) + "\n";
+                }
+                System.out.println(buddy.barWrap(currList.trim()));
+            }
+
+            else {
+
+                tasks.add(command);
+                System.out.println(buddy.barWrap("added: " + command));
+            }
         }
         scanner.close();
     }
