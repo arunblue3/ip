@@ -30,59 +30,61 @@ public class Buddy {
             if (command.trim().equals("bye")) {
                 System.out.println(buddy.barWrap(buddy.ending));
                 break;
-            }
-
-            else if (command.trim().equals("list")) {
+            } else if (command.trim().equals("list")) {
                 String currList = "Here are the tasks in your list: \n";
-                for (int i = 0; i < tasks.size(); i++){
-                    currList += i+1 + ". " + tasks.get(i) + "\n";
+                for (int i = 0; i < tasks.size(); i++) {
+                    currList += i + 1 + ". " + tasks.get(i) + "\n";
                 }
                 System.out.println(buddy.barWrap(currList.trim()));
-            }
-
-            else if (command.startsWith("mark")) {
+            } else if (command.startsWith("mark")) {
                 String[] parts = command.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.markAsDone();
                 System.out.println(buddy.barWrap("Nice! I've marked this task as done: \n" + toUpdate.toString()));
-            }
-
-            else if (command.startsWith("unmark")) {
+            } else if (command.startsWith("unmark")) {
                 String[] parts = command.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.unmark();
                 System.out.println(buddy.barWrap("OK, I've marked this task as not done yet: \n" + toUpdate.toString()));
-            }
+            } else if (command.startsWith("todo")) {
+                try {
+                    String[] parts = command.split(" ");
 
-            else if (command.startsWith("todo")) {
-                String[] parts = command.split(" ");
-                StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new StringBuilder();
 
-                for (int i = 1; i < parts.length; i++) {
+                    for (int i = 1; i < parts.length; i++) {
                         sb.append(parts[i]).append(" ");
+                    }
+
+                    String result = sb.toString().trim();
+                    if (result.isEmpty()) {
+                        throw new EmptyDescriptionException("todo");
+                    }
+
+                    Todo taskTodo = new Todo(result);
+                    tasks.add(taskTodo);
+
+                    System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskTodo.toString()
+                            + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
+                } catch (BuddyException e) {
+                    System.out.println(buddy.barWrap(e.toString()));
+                    ;
+                } finally {
                 }
 
-                String result = sb.toString().trim();
+            } else if (command.startsWith("deadline")) {
+                try {
+                    String[] parts = command.split(" ");
 
-                Todo taskTodo = new Todo(result);
-                tasks.add(taskTodo);
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder date = new StringBuilder();
 
-                System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskTodo.toString()
-                        + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
-
-            }
-
-            else if (command.startsWith("deadline")) {
-                String[] parts = command.split(" ");
-                StringBuilder sb = new StringBuilder();
-                StringBuilder date = new StringBuilder();
-
-                int sect = 0;
-                for (String word : parts) {
+                    int sect = 0;
+                    for (String word : parts) {
                         if (word.equals("/by")) {
-                            sect ++ ;
+                            sect++;
                             continue;
                         }
                         if (sect == 0) {
@@ -90,62 +92,78 @@ public class Buddy {
                         } else {
                             date.append(word).append(" ");
                         }
-                }
-
-                String result = sb.toString().trim();
-                String by = date.toString().trim();
-
-                Deadline taskDeadline = new Deadline(result,by);
-                tasks.add(taskDeadline);
-
-                System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskDeadline.toString()
-                        + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
-
-            }
-
-            else if (command.startsWith("event")) {
-                String[] parts = command.split(" ");
-                StringBuilder sb = new StringBuilder();
-                StringBuilder start = new StringBuilder();
-                StringBuilder end = new StringBuilder();
-
-                int sect = 0;
-                for (String word : parts) {
-                    if (word.equals("/from")) {
-                        sect ++ ;
-                        continue;
-                    } else if (word.equals("/to")){
-                        sect ++ ;
-                        continue;
                     }
 
-                    if (sect == 0) {
-                        sb.append(word).append(" ");
-                    } else if (sect == 1) {
-                        start.append(word).append(" ");
-                    }else {
-                        end.append(word).append(" ");
+                    String result = sb.toString().trim();
+                    String by = date.toString().trim();
+
+                    if (result.isEmpty() || by.isEmpty()) {
+                        throw new EmptyDescriptionException("deadline");
                     }
+
+                    Deadline taskDeadline = new Deadline(result, by);
+                    tasks.add(taskDeadline);
+
+                    System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskDeadline.toString()
+                            + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
+                } catch (BuddyException e) {
+                    System.out.println(buddy.barWrap(e.toString()));
+                    ;
+                }
+            } else if (command.startsWith("event")) {
+                try {
+                    String[] parts = command.split(" ");
+
+                    StringBuilder sb = new StringBuilder();
+                    StringBuilder start = new StringBuilder();
+                    StringBuilder end = new StringBuilder();
+
+                    int sect = 0;
+                    for (String word : parts) {
+                        if (word.equals("/from")) {
+                            sect++;
+                            continue;
+                        } else if (word.equals("/to")) {
+                            sect++;
+                            continue;
+                        }
+
+                        if (sect == 0) {
+                            sb.append(word).append(" ");
+                        } else if (sect == 1) {
+                            start.append(word).append(" ");
+                        } else {
+                            end.append(word).append(" ");
+                        }
+                    }
+
+                    String result = sb.toString().trim();
+                    String from = start.toString().trim();
+                    String to = end.toString().trim();
+
+                    if (result.isEmpty() || from.isEmpty() || to.isEmpty()) {
+                        throw new EmptyDescriptionException("deadline");
+                    }
+
+                    Event taskEvent = new Event(result, from, to);
+                    tasks.add(taskEvent);
+
+                    System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskEvent.toString()
+                            + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
+                } catch (BuddyException e) {
+                    System.out.println(buddy.barWrap(e.toString()));
+                    ;
                 }
 
-                String result = sb.toString().trim();
-                String from = start.toString().trim();
-                String to = end.toString().trim();
-
-                Event taskEvent = new Event(result,from,to);
-                tasks.add(taskEvent);
-
-                System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskEvent.toString()
-                        + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
-
+            } else {
+                try {
+                    throw new UnknownCommandException();
+                } catch (BuddyException e) {
+                    System.out.println(buddy.barWrap(e.getMessage()));
+                }
             }
 
-
-            else {
-                tasks.add(new Task(command));
-                System.out.println(buddy.barWrap("added: " + command));
-            }
         }
-        scanner.close();
+            scanner.close();
+        }
     }
-}
