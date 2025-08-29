@@ -30,25 +30,33 @@ public class Buddy {
             if (command.trim().equals("bye")) {
                 System.out.println(buddy.barWrap(buddy.ending));
                 break;
-            } else if (command.trim().equals("list")) {
+            }
+
+            else if (command.trim().equals("list")) {
                 String currList = "Here are the tasks in your list: \n";
                 for (int i = 0; i < tasks.size(); i++) {
                     currList += i + 1 + ". " + tasks.get(i) + "\n";
                 }
                 System.out.println(buddy.barWrap(currList.trim()));
-            } else if (command.startsWith("mark")) {
+            }
+
+            else if (command.startsWith("mark")) {
                 String[] parts = command.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.markAsDone();
                 System.out.println(buddy.barWrap("Nice! I've marked this task as done: \n" + toUpdate.toString()));
-            } else if (command.startsWith("unmark")) {
+            }
+
+            else if (command.startsWith("unmark")) {
                 String[] parts = command.split(" ");
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.unmark();
                 System.out.println(buddy.barWrap("OK, I've marked this task as not done yet: \n" + toUpdate.toString()));
-            } else if (command.startsWith("todo")) {
+            }
+
+            else if (command.startsWith("todo")) {
                 try {
                     String[] parts = command.split(" ");
 
@@ -152,10 +160,32 @@ public class Buddy {
                             + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
                 } catch (BuddyException e) {
                     System.out.println(buddy.barWrap(e.toString()));
-                    ;
                 }
 
-            } else {
+            }
+
+            else if (command.startsWith("delete")) {
+                try {
+                    String[] parts = command.split(" ");
+                    int idx = Integer.parseInt(parts[1]) - 1;
+
+                    if (idx < 0 || idx >= tasks.size()) {
+                        throw new BuddyException("No Task at this number");
+                    }
+
+                    Task removed = tasks.get(idx);
+
+                    tasks.remove(idx);
+                    System.out.println(buddy.barWrap("Noted. I've removed this task: " + removed.toString()
+                            + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
+                }
+                catch (BuddyException e) {
+                    System.out.println(buddy.barWrap(e.toString()));
+                }
+
+            }
+
+            else {
                 try {
                     throw new UnknownCommandException();
                 } catch (BuddyException e) {
