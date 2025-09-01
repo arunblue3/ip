@@ -20,7 +20,8 @@ public class Buddy {
     public static void main(String[] args) {
         Buddy buddy = new Buddy();
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage();
+        ArrayList<Task> tasks = new ArrayList<>(storage.load());
 
         System.out.println(buddy.getGreeting());
 
@@ -45,6 +46,7 @@ public class Buddy {
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.markAsDone();
+                storage.save(tasks);
                 System.out.println(buddy.barWrap("Nice! I've marked this task as done: \n" + toUpdate.toString()));
             }
 
@@ -53,6 +55,7 @@ public class Buddy {
                 int idx = Integer.parseInt(parts[1]) - 1;
                 Task toUpdate = tasks.get(idx);
                 toUpdate.unmark();
+                storage.save(tasks);
                 System.out.println(buddy.barWrap("OK, I've marked this task as not done yet: \n" + toUpdate.toString()));
             }
 
@@ -73,6 +76,7 @@ public class Buddy {
 
                     Todo taskTodo = new Todo(result);
                     tasks.add(taskTodo);
+                    storage.save(tasks);
 
                     System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskTodo.toString()
                             + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
@@ -90,7 +94,8 @@ public class Buddy {
                     StringBuilder date = new StringBuilder();
 
                     int sect = 0;
-                    for (String word : parts) {
+                    for (int i = 1; i < parts.length; i++) {
+                        String word = parts[i];
                         if (word.equals("/by")) {
                             sect++;
                             continue;
@@ -111,6 +116,7 @@ public class Buddy {
 
                     Deadline taskDeadline = new Deadline(result, by);
                     tasks.add(taskDeadline);
+                    storage.save(tasks);
 
                     System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskDeadline.toString()
                             + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
@@ -127,7 +133,8 @@ public class Buddy {
                     StringBuilder end = new StringBuilder();
 
                     int sect = 0;
-                    for (String word : parts) {
+                    for (int i = 1; i < parts.length; i++) {
+                        String word = parts[i];
                         if (word.equals("/from")) {
                             sect++;
                             continue;
@@ -155,6 +162,7 @@ public class Buddy {
 
                     Event taskEvent = new Event(result, from, to);
                     tasks.add(taskEvent);
+                    storage.save(tasks);
 
                     System.out.println(buddy.barWrap("Got it. I've added this task: \n" + taskEvent.toString()
                             + "\n" + String.format("Now you have %d tasks in the list.", tasks.size())));
@@ -174,6 +182,7 @@ public class Buddy {
                     }
 
                     Task removed = tasks.get(idx);
+                    storage.save(tasks);
 
                     tasks.remove(idx);
                     System.out.println(buddy.barWrap("Noted. I've removed this task: " + removed.toString()
