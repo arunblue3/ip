@@ -83,7 +83,6 @@ public class Buddy {
                 } catch (BuddyException e) {
                     System.out.println(buddy.barWrap(e.toString()));
                     ;
-                } finally {
                 }
 
             } else if (command.startsWith("deadline")) {
