@@ -52,7 +52,16 @@ public abstract class Task {
 
 
     public static Task fromDataString(String data) {
+        data = data.trim();
+        if (data.isEmpty()) {
+            throw new IllegalArgumentException("Empty task line");
+        }
+
         String[] parts = data.split("\\|");
+        if (parts.length < 3) {
+            throw new IllegalArgumentException("Need 3 or more fields: " + data);
+        }
+
         String type = parts[0].trim();
         boolean done = parts[1].trim().equals("1");
         String desc = parts[2].trim();
@@ -64,13 +73,19 @@ public abstract class Task {
                 return t;
             }
             case "D": {
+                if (parts.length < 4)
+                    throw new IllegalArgumentException("Deadline missing date: " + data);
                 Task t = new Deadline(desc, parts[3].trim());
                 if (done) t.markAsDone();
                 return t;
             }
             case "E": {
-                String[] times = parts[3].trim().split("-");
-                Task t = new Event(desc, times[0], times[1]);
+                if (parts.length < 4)
+                    throw new IllegalArgumentException("Event missing date range: " + data);
+                String[] times = parts[3].trim().split("-", 2);
+                if (times.length < 2)
+                    throw new IllegalArgumentException("Bad event range (need from-to): " + data);
+                Task t = new Event(desc, times[0].trim(), times[1].trim());
                 if (done) t.markAsDone();
                 return t;
             }
@@ -78,5 +93,6 @@ public abstract class Task {
                 throw new IllegalArgumentException("Unknown task type: " + type);
         }
     }
+
 
 }

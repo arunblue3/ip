@@ -32,6 +32,8 @@ public class Storage {
         try (BufferedReader reader = Files.newBufferedReader(dataFile)) {
             String line;
             while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
                 taskList.add(Task.fromDataString(line));
             }
         } catch (IOException e) {

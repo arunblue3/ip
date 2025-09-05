@@ -1,3 +1,1 @@
-T | 1 | hi
-D | 1 | ffrfrf | Monday
-E | 0 | project meeting | thursay-sunday
+D | 0 | subscribe | Dec 2 2019
