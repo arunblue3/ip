@@ -41,7 +41,7 @@ public abstract class Task {
                 return "T | " + (isDone() ? 1 : 0) + " | " + getDescription();
             case "D":
                 return "D | " + (isDone() ? 1 : 0) + " | " + getDescription()
-                        + " | " + ((Deadline) this).getBy();
+                        + " | " + ((Deadline) this).getByIso();
             case "E":
                 return "E | " + (isDone() ? 1 : 0) + " | " + getDescription()
                         + " | " + ((Event) this).getFrom() + "-" + ((Event) this).getTo();
