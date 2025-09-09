@@ -115,8 +115,14 @@ public class Parser {
             storage.save(tasks.asList());
             ui.showMessage("Saved.");
             return false;
-        }
-        else {
+        } else if (cmd.startsWith("find")) {
+            String keyword = cmd.substring("find".length()).trim();
+            if (keyword.isEmpty()) {
+                throw new BuddyException("Usage: find <keyword>");
+            }
+            ui.showMessage(tasks.findAsString(keyword));
+            return false;
+        } else {
             throw new UnknownCommandException();
         }
 
