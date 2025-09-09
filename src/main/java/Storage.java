@@ -7,39 +7,42 @@ public class Storage {
     private final Path dataDir;
     private final Path dataFile;
 
-    public Storage() {
-        this.dataDir = Paths.get("./data");
-        this.dataFile = dataDir.resolve("buddy.txt");
+    public Storage(String filePath) {
+        Path p = Paths.get(filePath);
+        this.dataDir = p.getParent() == null ? Paths.get(".") : p.getParent();
+        this.dataFile = p;
         createFolderIfMissing();
+    }
+
+    public Storage() {
+        this("data/buddy.txt");
     }
 
     private void createFolderIfMissing() {
         try {
-            if (Files.notExists(dataDir)) {
+            if (!Files.exists(dataDir)) {
                 Files.createDirectories(dataDir);
             }
+            if (!Files.exists(dataFile)) {
+                Files.createFile(dataFile);
+            }
         } catch (IOException e) {
-            System.out.println("Error creating data folder: " + e.getMessage());
+            System.out.println("Error creating data storage: " + e.getMessage());
         }
     }
 
     public List<Task> load() {
-        List<Task> taskList = new ArrayList<>();
-        if (!Files.exists(dataFile)) {
-            return taskList;
-        }
-
-        try (BufferedReader reader = Files.newBufferedReader(dataFile)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                taskList.add(Task.fromDataString(line));
+        List<Task> tasks = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(dataFile);
+            for (String line : lines) {
+                if (line.trim().isEmpty()) continue;
+                tasks.add(Task.fromDataString(line));
             }
         } catch (IOException e) {
             System.out.println("Error loading tasks: " + e.getMessage());
         }
-        return taskList;
+        return tasks;
     }
 
     public void save(List<Task> taskList) {
@@ -52,5 +55,4 @@ public class Storage {
             System.out.println("Error saving tasks: " + e.getMessage());
         }
     }
-
 }
