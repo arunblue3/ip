@@ -31,9 +31,16 @@ application {
     mainClass.set("buddy.Buddy")
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'buddy.Buddy'
+    }
+}
+
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "buddy"
     archiveClassifier = null
+    archiveFileName = 'buddy.jar'
 }
 
 run{
