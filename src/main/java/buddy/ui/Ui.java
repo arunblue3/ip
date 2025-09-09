@@ -2,7 +2,7 @@ package buddy.ui;
 
 import java.util.Scanner;
 
-public class UI {
+public class Ui {
     private final Scanner scanner = new Scanner(System.in);
 
     public void showWelcome() {

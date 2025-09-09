@@ -5,7 +5,7 @@ import buddy.model.Task;
 import buddy.model.TaskList;
 import buddy.model.Todo;
 import buddy.storage.Storage;
-import buddy.ui.UI;
+import buddy.ui.Ui;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -25,7 +25,7 @@ public class TodoTest {
         @Test
         void testAddTodoWithValidDescription() throws BuddyException {
 
-            UI ui = new UI();
+            Ui ui = new Ui();
             Storage storage = new Storage(tempDir.resolve("tasks.txt").toString());
             TaskList tasks = new TaskList(storage.load());
 

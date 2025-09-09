@@ -5,7 +5,7 @@ import buddy.exception.EmptyDescriptionException;
 import buddy.exception.UnknownCommandException;
 import buddy.model.*;
 import buddy.storage.Storage;
-import buddy.ui.UI;
+import buddy.ui.Ui;
 
 public class Parser {
 
@@ -15,7 +15,7 @@ public class Parser {
      * Previously I rebuilt the command using StringBuilder. No code was copied; only the idea.
      */
 
-    public static boolean handle(String input, TaskList tasks, UI ui, Storage storage) throws BuddyException {
+    public static boolean handle(String input, TaskList tasks, Ui ui, Storage storage) throws BuddyException {
         String cmd = input.trim();
         if (cmd.isEmpty()) {
             return false;

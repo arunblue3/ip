@@ -38,16 +38,16 @@ public abstract class Task {
 
     public String toDataString() {
         switch (getType()) {
-            case "T":
-                return "T | " + (isDone() ? 1 : 0) + " | " + getDescription();
-            case "D":
-                return "D | " + (isDone() ? 1 : 0) + " | " + getDescription()
-                        + " | " + ((Deadline) this).getByIso();
-            case "E":
-                return "E | " + (isDone() ? 1 : 0) + " | " + getDescription()
-                        + " | " + ((Event) this).getFrom() + "-" + ((Event) this).getTo();
-            default:
-                return "";
+        case "T":
+            return "T | " + (isDone() ? 1 : 0) + " | " + getDescription();
+        case "D":
+            return "D | " + (isDone() ? 1 : 0) + " | " + getDescription()
+                    + " | " + ((Deadline) this).getByIso();
+        case "E":
+            return "E | " + (isDone() ? 1 : 0) + " | " + getDescription()
+                    + " | " + ((Event) this).getFrom() + "-" + ((Event) this).getTo();
+        default:
+            return "";
         }
     }
 
