@@ -35,7 +35,9 @@ public class Deadline extends Task {
     }
 
     private static LocalDate parseDateFlexible(String s) {
-        if (s == null) throw new IllegalArgumentException("Date is null");
+        if (s == null) {
+            throw new IllegalArgumentException("Date is null");
+        }
         String t = s.trim();
 
         DateTimeFormatter[] fmts = new DateTimeFormatter[] {

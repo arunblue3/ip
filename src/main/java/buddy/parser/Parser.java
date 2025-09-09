@@ -3,7 +3,11 @@ package buddy.parser;
 import buddy.exception.BuddyException;
 import buddy.exception.EmptyDescriptionException;
 import buddy.exception.UnknownCommandException;
-import buddy.model.*;
+import buddy.model.Deadline;
+import buddy.model.Event;
+import buddy.model.Task;
+import buddy.model.TaskList;
+import buddy.model.Todo;
 import buddy.storage.Storage;
 import buddy.ui.Ui;
 
@@ -19,54 +23,40 @@ public class Parser {
         String cmd = input.trim();
         if (cmd.isEmpty()) {
             return false;
-        }
-
-        if (cmd.equals("bye")) {
-            storage.save(tasks.asList());
+        } else if (cmd.equals("bye")) {
+            storage.save(tasks.toList());
             ui.showGoodbye();
             return true;
-        }
-
-        if (cmd.equals("list")) {
+        } else if (cmd.equals("list")) {
             ui.showMessage(tasks.listAsString());
             return false;
-        }
-
-        if (cmd.startsWith("mark ")) {
+        } else if (cmd.startsWith("mark ")) {
             int idx = Integer.parseInt(cmd.substring(5).trim());
             Task t = tasks.get(idx);
             t.markAsDone();
             ui.showMessage("Nice! I've marked this task as done:\n  " + t);
             return false;
-        }
-
-        if (cmd.startsWith("unmark ")) {
+        } else if (cmd.startsWith("unmark ")) {
             int idx = Integer.parseInt(cmd.substring(7).trim());
             Task t = tasks.get(idx);
             t.unmark();
             ui.showMessage("OK, I've marked this task as not done yet:\n  " + t);
             return false;
-        }
-
-        if (cmd.startsWith("delete ")) {
+        } else if (cmd.startsWith("delete ")) {
             int idx = Integer.parseInt(cmd.substring(7).trim());
             Task removed = tasks.delete(idx);
-            ui.showMessage("Noted. I've removed this task:\n  " + removed + "\nNow you have " + tasks.size() + " tasks in the list.");
+            ui.showMessage("Noted. I've removed this task:\n  " + removed + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        }
-
-        if (cmd.startsWith("todo")) {
+        } else if (cmd.startsWith("todo")) {
             String desc = cmd.length() > 4 ? cmd.substring(4).trim() : "";
             if (desc.isEmpty()) {
                 throw new EmptyDescriptionException("todo");
             }
             Task t = new Todo(desc);
             tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.");
+            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        }
-
-        if (cmd.startsWith("deadline")) {
+        } else if (cmd.startsWith("deadline")) {
             String rest = cmd.substring("deadline".length()).trim();
             int byIdx = rest.lastIndexOf("/by");
             if (byIdx < 0) {
@@ -82,11 +72,9 @@ public class Parser {
             }
             Task t = new Deadline(desc, by);
             tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.");
+            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        }
-
-        if (cmd.startsWith("event")) {
+        } else if (cmd.startsWith("event")) {
             String rest = cmd.substring("event".length()).trim();
             int fromIdx = rest.lastIndexOf("/from");
             int toIdx = rest.lastIndexOf("/to");
@@ -107,16 +95,13 @@ public class Parser {
             }
             Task t = new Event(desc, from, to);
             tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.");
+            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        }
-
-        if (cmd.equals("save")) {
-            storage.save(tasks.asList());
+        } else if (cmd.equals("save")) {
+            storage.save(tasks.toList());
             ui.showMessage("Saved.");
             return false;
-        }
-        else {
+        } else {
             throw new UnknownCommandException();
         }
 
