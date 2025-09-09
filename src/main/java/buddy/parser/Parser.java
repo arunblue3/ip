@@ -20,7 +20,7 @@ import buddy.ui.UI;
 public class Parser {
 
     /**
-    *Parses and executes a single command line.
+     * Parses and executes a single command line.
      */
 
     public static boolean handle(String input, TaskList tasks, UI ui, Storage storage) throws BuddyException {

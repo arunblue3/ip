@@ -9,6 +9,10 @@ import java.util.Scanner;
 public class UI {
     private final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Greets user when chatbot is opened.
+     */
+
     public void showWelcome() {
         showLine();
         System.out.println(" Hello! I'm Buddy");
@@ -46,6 +50,10 @@ public class UI {
     public void showLoadingError() {
         showError("Failed to load previous tasks. Starting with an empty list.");
     }
+
+    /**
+     * Exit message.
+     */
 
     public void showGoodbye() {
         showLine();
