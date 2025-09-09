@@ -6,6 +6,10 @@ import buddy.parser.Parser;
 import buddy.storage.Storage;
 import buddy.ui.UI;
 
+/**
+ * Entry point of the Buddy chatbot. Wires UI, storage, parser and task list.
+ */
+
 public class Buddy {
 
     private Storage storage;
@@ -17,6 +21,11 @@ public class Buddy {
         storage = new Storage(filePath);
         tasks = new TaskList(storage.load());
     }
+
+    /**
+     * Runs the interactive loop: reads a command, parses it, executes it, and
+     * prints the result, until the user exits.
+     */
 
     public void run() {
         ui.showWelcome();

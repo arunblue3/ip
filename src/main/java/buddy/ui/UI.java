@@ -2,8 +2,16 @@ package buddy.ui;
 
 import java.util.Scanner;
 
+/**
+ * Console UI helper for printing messages and reading commands.
+ */
+
 public class UI {
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Greets user when chatbot is opened.
+     */
 
     public void showWelcome() {
         showLine();
@@ -28,6 +36,10 @@ public class UI {
         showLine();
     }
 
+    /**
+     * Reads the next command line from input.
+     */
+
     public String readCommand() {
         if (scanner.hasNextLine()) {
             return scanner.nextLine();
@@ -38,6 +50,10 @@ public class UI {
     public void showLoadingError() {
         showError("Failed to load previous tasks. Starting with an empty list.");
     }
+
+    /**
+     * Exit message.
+     */
 
     public void showGoodbye() {
         showLine();

@@ -4,6 +4,10 @@ import buddy.exception.BuddyException;
 
 import java.util.*;
 
+/**
+ * Mutable list of Tasks.
+ */
+
 public class TaskList {
     private final List<Task> tasks;
 
@@ -15,9 +19,17 @@ public class TaskList {
         this.tasks = new ArrayList<>(initial);
     }
 
+    /**
+     * Adds a task to the end of the list.
+     */
     public void add(Task t) {
         tasks.add(t);
     }
+
+    /**
+     * Deletes the task at index.
+     * Accounts for 1 based indexing used in input
+     */
 
     public Task delete(int oneBasedIndex) throws BuddyException {
         int idx = oneBasedIndex - 1;
@@ -26,6 +38,10 @@ public class TaskList {
         }
         return tasks.remove(idx);
     }
+
+    /**
+     * Returns a multi-line list of tasks (1-based).
+     */
 
     public Task get(int oneBasedIndex) throws BuddyException {
         int idx = oneBasedIndex - 1;

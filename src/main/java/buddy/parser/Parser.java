@@ -7,12 +7,20 @@ import buddy.model.*;
 import buddy.storage.Storage;
 import buddy.ui.UI;
 
+/*
+  Re-use notice:
+  I switched this parsing logic to use cmd.substring(...) after observing this approach in other implementations.
+  Previously I rebuilt the command using StringBuilder. No code was copied; only the idea.
+ */
+
+/**
+ * Parses user commands and applies them to the task list, producing user-visible output
+ */
+
 public class Parser {
 
-    /*
-     * Re-use notice:
-     * I switched this parsing logic to use cmd.substring(...) after observing this approach in other implementations.
-     * Previously I rebuilt the command using StringBuilder. No code was copied; only the idea.
+    /**
+     * Parses and executes a single command line.
      */
 
     public static boolean handle(String input, TaskList tasks, UI ui, Storage storage) throws BuddyException {

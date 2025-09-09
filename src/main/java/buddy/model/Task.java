@@ -1,5 +1,9 @@
 package buddy.model;
 
+/**
+ * Superclass of all tasks.
+ */
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -36,6 +40,10 @@ public abstract class Task {
         return "[" + getStatusIcon() + "] " + description;
     }
 
+    /**
+     * Modifies the task to be stored as a String based on subtype
+     */
+
     public String toDataString() {
         switch (getType()) {
             case "T":
@@ -51,6 +59,9 @@ public abstract class Task {
         }
     }
 
+    /**
+     * Modifies the String of data from storage to Task
+     */
 
     public static Task fromDataString(String data) {
         data = data.trim();
