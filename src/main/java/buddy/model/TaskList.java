@@ -70,4 +70,29 @@ public class TaskList {
         }
         return sb.toString().trim();
     }
+
+    /** Returns all tasks whose description contains the keyword. */
+    public List<Task> find(String keyword) {
+        String k = keyword.toLowerCase();
+        List<Task> matches = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.getDescription().toLowerCase().contains(k)) {
+                matches.add(t);
+            }
+        }
+        return matches;
+    }
+
+    /** Formats matches into a numbered list. */
+    public String findAsString(String keyword) {
+        List<Task> matches = find(keyword);
+        if (matches.isEmpty()) {
+            return "No matching tasks found.";
+        }
+        StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
+        for (int i = 0; i < matches.size(); i++) {
+            sb.append(i + 1).append(". ").append(matches.get(i)).append("\n");
+        }
+        return sb.toString().trim();
+    }
 }
