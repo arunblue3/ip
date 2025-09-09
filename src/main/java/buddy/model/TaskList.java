@@ -1,3 +1,7 @@
+package buddy.model;
+
+import buddy.exception.BuddyException;
+
 import java.util.*;
 
 public class TaskList {

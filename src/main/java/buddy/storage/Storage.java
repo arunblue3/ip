@@ -1,3 +1,7 @@
+package buddy.storage;
+
+import buddy.model.Task;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;

@@ -1,4 +1,10 @@
-import java.util.*;
+package buddy;
+
+import buddy.exception.BuddyException;
+import buddy.model.TaskList;
+import buddy.parser.Parser;
+import buddy.storage.Storage;
+import buddy.ui.UI;
 
 public class Buddy {
 

@@ -1,4 +1,4 @@
-# Buddy User Guide
+# buddy.Buddy User Guide
 
 // Update the title above to match the actual product name
 

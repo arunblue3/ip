@@ -1,3 +1,5 @@
+package buddy.model;
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -73,14 +75,14 @@ public abstract class Task {
             }
             case "D": {
                 if (parts.length < 4)
-                    throw new IllegalArgumentException("Deadline missing date: " + data);
+                    throw new IllegalArgumentException("buddy.model.Deadline missing date: " + data);
                 Task t = new Deadline(desc, parts[3].trim());
                 if (done) t.markAsDone();
                 return t;
             }
             case "E": {
                 if (parts.length < 4)
-                    throw new IllegalArgumentException("Event missing date range: " + data);
+                    throw new IllegalArgumentException("buddy.model.Event missing date range: " + data);
                 String[] times = parts[3].trim().split("-", 2);
                 if (times.length < 2)
                     throw new IllegalArgumentException("Bad event range (need from-to): " + data);
