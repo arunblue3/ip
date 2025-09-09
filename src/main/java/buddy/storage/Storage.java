@@ -2,9 +2,15 @@ package buddy.storage;
 
 import buddy.model.Task;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adds tasks to a text file and loads them back.
@@ -30,8 +36,7 @@ public class Storage {
         try {
             if (!Files.exists(dataDir)) {
                 Files.createDirectories(dataDir);
-            }
-            if (!Files.exists(dataFile)) {
+            } else if (!Files.exists(dataFile)) {
                 Files.createFile(dataFile);
             }
         } catch (IOException e) {
@@ -48,7 +53,9 @@ public class Storage {
         try {
             List<String> lines = Files.readAllLines(dataFile);
             for (String line : lines) {
-                if (line.trim().isEmpty()) continue;
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
                 tasks.add(Task.fromDataString(line));
             }
         } catch (IOException e) {

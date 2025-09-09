@@ -2,7 +2,8 @@ package buddy.model;
 
 import buddy.exception.BuddyException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Mutable list of Tasks.
@@ -51,11 +52,11 @@ public class TaskList {
         return tasks.get(idx);
     }
 
-    public int size() {
+    public int getSize() {
         return tasks.size();
     }
 
-    public List<Task> asList() {
+    public List<Task> toList() {
         return tasks;
     }
 

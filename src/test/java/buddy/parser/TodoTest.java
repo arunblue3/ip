@@ -5,7 +5,7 @@ import buddy.model.Task;
 import buddy.model.TaskList;
 import buddy.model.Todo;
 import buddy.storage.Storage;
-import buddy.ui.UI;
+import buddy.ui.Ui;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -25,7 +25,7 @@ public class TodoTest {
         @Test
         void testAddTodoWithValidDescription() throws BuddyException {
 
-            UI ui = new UI();
+            Ui ui = new Ui();
             Storage storage = new Storage(tempDir.resolve("tasks.txt").toString());
             TaskList tasks = new TaskList(storage.load());
 
@@ -33,9 +33,9 @@ public class TodoTest {
             boolean shouldExit = Parser.handle(cmd, tasks, ui, storage);
 
             assertFalse(shouldExit, "Adding a todo should not exit the app");
-            assertEquals(1, tasks.size(), "Exactly one task should be added");
+            assertEquals(1, tasks.getSize(), "Exactly one task should be added");
 
-            Task t = tasks.asList().get(0);
+            Task t = tasks.toList().get(0);
             assertTrue(t instanceof Todo, "Task should be a Todo");
             assertEquals("buy apples", t.getDescription());
             assertFalse(t.isDone(), "New todo should be not done by default");

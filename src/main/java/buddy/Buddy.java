@@ -4,7 +4,7 @@ import buddy.exception.BuddyException;
 import buddy.model.TaskList;
 import buddy.parser.Parser;
 import buddy.storage.Storage;
-import buddy.ui.UI;
+import buddy.ui.Ui;
 
 /**
  * Entry point of the Buddy chatbot. Wires UI, storage, parser and task list.
@@ -14,10 +14,10 @@ public class Buddy {
 
     private Storage storage;
     private TaskList tasks;
-    private UI ui;
+    private Ui ui;
 
     public Buddy(String filePath) {
-        ui = new UI();
+        ui = new Ui();
         storage = new Storage(filePath);
         tasks = new TaskList(storage.load());
     }
