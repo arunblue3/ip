@@ -7,7 +7,7 @@ public class UI {
 
     public void showWelcome() {
         showLine();
-        System.out.println(" Hello! I'm buddy.Buddy");
+        System.out.println(" Hello! I'm Buddy");
         System.out.println(" What can I do for you?");
         showLine();
     }
@@ -29,7 +29,10 @@ public class UI {
     }
 
     public String readCommand() {
-        return scanner.nextLine();
+        if (scanner.hasNextLine()) {
+            return scanner.nextLine();
+        }
+        return null;
     }
 
     public void showLoadingError() {

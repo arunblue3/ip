@@ -22,11 +22,20 @@ public class Buddy {
         ui.showWelcome();
         while (true) {
             String input = ui.readCommand();
+            if (input == null) {
+                ui.showGoodbye();
+                break;
+            }
+            if (input.isBlank()) {
+                continue;
+            }
             try {
                 boolean shouldExit = Parser.handle(input, tasks, ui, storage);
                 if (shouldExit) break;
-            } catch (BuddyException | RuntimeException e) {
+            } catch (BuddyException e) {
                 ui.showError(e.getMessage());
+            } catch (Exception e) {
+                ui.showError("Unexpected error: " + e.getMessage());
             }
         }
         ui.close();

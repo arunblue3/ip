@@ -78,7 +78,7 @@ public class Parser {
                 throw new EmptyDescriptionException("deadline");
             }
             if (by.isEmpty()) {
-                throw new BuddyException("buddy.model.Deadline date is missing. Usage: deadline <desc> /by <date>");
+                throw new BuddyException("Deadline date is missing. Usage: deadline <desc> /by <date>");
             }
             Task t = new Deadline(desc, by);
             tasks.add(t);
@@ -100,10 +100,10 @@ public class Parser {
                 throw new EmptyDescriptionException("event");
             }
             if (from.isEmpty()) {
-                throw new BuddyException("buddy.model.Event start time is missing. Usage: event <desc> /from <from> /to <to>");
+                throw new BuddyException("Event start time is missing. Usage: event <desc> /from <from> /to <to>");
             }
             if (to.isEmpty()) {
-                throw new BuddyException("buddy.model.Event end time is missing. Usage: event <desc> /from <from> /to <to>");
+                throw new BuddyException("Event end time is missing. Usage: event <desc> /from <from> /to <to>");
             }
             Task t = new Event(desc, from, to);
             tasks.add(t);
@@ -116,7 +116,9 @@ public class Parser {
             ui.showMessage("Saved.");
             return false;
         }
+        else {
+            throw new UnknownCommandException();
+        }
 
-        throw new UnknownCommandException();
     }
 }
