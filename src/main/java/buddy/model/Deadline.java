@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * A task with a single by date.
+ */
+
 public class Deadline extends Task {
 
     protected LocalDate by;

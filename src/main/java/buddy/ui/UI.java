@@ -2,6 +2,10 @@ package buddy.ui;
 
 import java.util.Scanner;
 
+/**
+ * Console UI helper for printing messages and reading commands.
+ */
+
 public class UI {
     private final Scanner scanner = new Scanner(System.in);
 
@@ -27,6 +31,10 @@ public class UI {
         System.out.println("Error: " + msg);
         showLine();
     }
+
+    /**
+     * Reads the next command line from input.
+     */
 
     public String readCommand() {
         if (scanner.hasNextLine()) {

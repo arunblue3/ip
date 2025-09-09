@@ -6,6 +6,10 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+/**
+ * Adds tasks to a text file and loads them back.
+ */
+
 public class Storage {
 
     private final Path dataDir;
@@ -35,6 +39,10 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from text file. Non-existent files result in an empty list.
+     */
+
     public List<Task> load() {
         List<Task> tasks = new ArrayList<>();
         try {
@@ -48,6 +56,10 @@ public class Storage {
         }
         return tasks;
     }
+
+    /**
+     * Writes all tasks to text file.
+     */
 
     public void save(List<Task> taskList) {
         try (BufferedWriter writer = Files.newBufferedWriter(dataFile)) {
