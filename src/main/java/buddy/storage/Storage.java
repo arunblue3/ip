@@ -50,6 +50,7 @@ public class Storage {
 
     public List<Task> load() {
         List<Task> tasks = new ArrayList<>();
+        assert dataFile != null : "Data file must be initialized";
         try {
             List<String> lines = Files.readAllLines(dataFile);
             for (String line : lines) {
@@ -69,6 +70,8 @@ public class Storage {
      */
 
     public void save(List<Task> taskList) {
+        assert taskList != null : "Task list to save cannot be null";
+        assert dataFile != null : "Data file must be initialized";
         try (BufferedWriter writer = Files.newBufferedWriter(dataFile)) {
             for (Task task : taskList) {
                 writer.write(task.toDataString());

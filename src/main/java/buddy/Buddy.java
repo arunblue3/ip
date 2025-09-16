@@ -17,6 +17,7 @@ public class Buddy {
     private Ui ui;
 
     public Buddy(String filePath) {
+        assert filePath != null && !filePath.isBlank() : "Storage path must be provided";
         ui = new Ui();
         storage = new Storage(filePath);
         tasks = new TaskList(storage.load());

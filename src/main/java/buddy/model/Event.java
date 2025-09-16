@@ -7,8 +7,10 @@ public class Event extends Task {
 
     public Event(String description, String from, String to) {
         super(description);
+        assert !description.isBlank() : "Event description cannot be blank";
         this.from = from;
         this.to = to;
+        assert !from.isBlank() && !to.isBlank() : "Event range cannot be blank";
     }
 
     @Override

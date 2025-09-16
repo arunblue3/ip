@@ -29,6 +29,7 @@ public class Parser {
 
     public static boolean handle(String input, TaskList tasks, Ui ui, Storage storage) throws BuddyException {
         String cmd = input.trim();
+        assert cmd != null : "Command cannot be null";
         if (cmd.isEmpty()) {
             return false;
         } else if (cmd.equals("bye")) {

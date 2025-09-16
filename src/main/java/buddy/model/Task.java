@@ -9,6 +9,7 @@ public abstract class Task {
     protected boolean isDone;
 
     public Task(String description) {
+        assert description != null && !description.isBlank() : "Task description cannot be blank";
         this.description = description;
         this.isDone = false;
     }
@@ -65,6 +66,7 @@ public abstract class Task {
 
     public static Task fromDataString(String data) {
         data = data.trim();
+        assert data != null : "Input to fromDataString cannot be null";
         if (data.isEmpty()) {
             throw new IllegalArgumentException("Empty task line");
         }
