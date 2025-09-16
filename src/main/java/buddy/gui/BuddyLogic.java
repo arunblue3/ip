@@ -31,9 +31,7 @@ public class BuddyLogic {
         UiLogic ui = new UiLogic();
         try {
             lastExit = Parser.handle(input, tasks, ui, storage);
-        } catch (BuddyException e) {
-            ui.showError(e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (BuddyException | IllegalArgumentException e) {
             ui.showError(e.getMessage());
         }
         String out = ui.getMessage();

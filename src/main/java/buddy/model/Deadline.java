@@ -17,6 +17,7 @@ public class Deadline extends Task {
 
     public Deadline(String description, String byStr) {
         super(description);
+        assert !byStr.isBlank() : "Deadline description cannot be blank";
         this.by = parseDateFlexible(byStr);
     }
 

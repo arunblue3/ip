@@ -4,6 +4,7 @@ public class Todo extends Task {
 
     public Todo(String description) {
         super(description);
+        assert !description.isBlank() : "Todo description cannot be blank";
     }
 
     @Override

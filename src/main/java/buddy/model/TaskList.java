@@ -24,7 +24,10 @@ public class TaskList {
      * Adds a task to the end of the list.
      */
     public void add(Task t) {
+        assert t != null : "Cannot add null task";
+        int before = tasks.size();
         tasks.add(t);
+        assert tasks.size() == before + 1 : "TaskList size should increase by 1";
     }
 
     /**
@@ -37,7 +40,10 @@ public class TaskList {
         if (idx < 0 || idx >= tasks.size()) {
             throw new BuddyException("Invalid task index");
         }
-        return tasks.remove(idx);
+        int before = tasks.size();
+        Task removed = tasks.remove(oneBasedIndex - 1);
+        assert tasks.size() == before - 1 : "TaskList size should decrease by 1";
+        return removed;
     }
 
     /**
@@ -74,6 +80,7 @@ public class TaskList {
     /** Returns all tasks whose description contains the keyword. */
     public List<Task> find(String keyword) {
         String k = keyword.toLowerCase();
+        assert keyword != null : "Search keyword cannot be null";
         List<Task> matches = new ArrayList<>();
         for (Task t : tasks) {
             if (t.getDescription().toLowerCase().contains(k)) {
