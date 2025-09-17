@@ -1,5 +1,6 @@
 package buddy.parser;
 
+import buddy.common.Commands;
 import buddy.exception.BuddyException;
 import buddy.exception.EmptyDescriptionException;
 import buddy.exception.UnknownCommandException;
@@ -31,31 +32,31 @@ public class Parser {
         String cmd = input.trim();
         if (cmd.isEmpty()) {
             return false;
-        } else if (cmd.equals("bye")) {
+        } else if (cmd.equals(Commands.BYE)) {
             storage.save(tasks.toList());
             ui.showGoodbye();
             return true;
-        } else if (cmd.equals("list")) {
+        } else if (cmd.equals(Commands.LIST)) {
             ui.showMessage(tasks.listAsString());
             return false;
-        } else if (cmd.startsWith("mark ")) {
+        } else if (cmd.startsWith(Commands.MARK)) {
             int idx = Integer.parseInt(cmd.substring(5).trim());
             Task t = tasks.get(idx);
             t.markAsDone();
             ui.showMessage("Nice! I've marked this task as done:\n  " + t);
             return false;
-        } else if (cmd.startsWith("unmark ")) {
+        } else if (cmd.startsWith(Commands.UNMARK)) {
             int idx = Integer.parseInt(cmd.substring(7).trim());
             Task t = tasks.get(idx);
             t.unmark();
             ui.showMessage("OK, I've marked this task as not done yet:\n  " + t);
             return false;
-        } else if (cmd.startsWith("delete ")) {
+        } else if (cmd.startsWith(Commands.DELETE)) {
             int idx = Integer.parseInt(cmd.substring(7).trim());
             Task removed = tasks.delete(idx);
             ui.showMessage("Noted. I've removed this task:\n  " + removed + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        } else if (cmd.startsWith("todo")) {
+        } else if (cmd.startsWith(Commands.TODO)) {
             String desc = cmd.length() > 4 ? cmd.substring(4).trim() : "";
             if (desc.isEmpty()) {
                 throw new EmptyDescriptionException("todo");
@@ -64,7 +65,7 @@ public class Parser {
             tasks.add(t);
             ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        } else if (cmd.startsWith("deadline")) {
+        } else if (cmd.startsWith(Commands.DEADLINE)) {
             String rest = cmd.substring("deadline".length()).trim();
             int byIdx = rest.lastIndexOf("/by");
             if (byIdx < 0) {
@@ -82,7 +83,7 @@ public class Parser {
             tasks.add(t);
             ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        } else if (cmd.startsWith("event")) {
+        } else if (cmd.startsWith(Commands.EVENT)) {
             String rest = cmd.substring("event".length()).trim();
             int fromIdx = rest.lastIndexOf("/from");
             int toIdx = rest.lastIndexOf("/to");
@@ -105,11 +106,11 @@ public class Parser {
             tasks.add(t);
             ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
             return false;
-        } else if (cmd.equals("save")) {
+        } else if (cmd.equals(Commands.SAVE)) {
             storage.save(tasks.toList());
             ui.showMessage("Saved.");
             return false;
-        } else if (cmd.startsWith("find")) {
+        } else if (cmd.startsWith(Commands.FIND)) {
             String keyword = cmd.substring("find".length()).trim();
             if (keyword.isEmpty()) {
                 throw new BuddyException("Usage: find <keyword>");
