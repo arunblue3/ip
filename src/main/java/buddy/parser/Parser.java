@@ -1,14 +1,20 @@
 package buddy.parser;
 
+import buddy.command.AddDeadlineCommand;
+import buddy.command.AddEventCommand;
+import buddy.command.AddTodoCommand;
+import buddy.command.ByeCommand;
+import buddy.command.Command;
+import buddy.command.DeleteCommand;
+import buddy.command.FindCommand;
+import buddy.command.ListCommand;
+import buddy.command.MarkCommand;
+import buddy.command.SaveCommand;
+import buddy.command.UnmarkCommand;
 import buddy.common.Commands;
 import buddy.exception.BuddyException;
-import buddy.exception.EmptyDescriptionException;
 import buddy.exception.UnknownCommandException;
-import buddy.model.Deadline;
-import buddy.model.Event;
-import buddy.model.Task;
 import buddy.model.TaskList;
-import buddy.model.Todo;
 import buddy.storage.Storage;
 import buddy.ui.Ui;
 
@@ -26,101 +32,86 @@ public class Parser {
 
     /**
      * Parses and executes a single command line.
+     * @return true if the app should exit, false otherwise.
      */
 
     public static boolean handle(String input, TaskList tasks, Ui ui, Storage storage) throws BuddyException {
-        String cmd = input.trim();
-        assert cmd != null : "Command cannot be null";
-        if (cmd.isEmpty()) {
+        String trimmed = input.trim();
+        assert trimmed != null : "Command cannot be null";
+        if (trimmed.isEmpty()) {
             return false;
-        } else if (cmd.equals(Commands.BYE)) {
+        }
+
+        // Split once: <keyword> <rest...>
+        String[] parts = trimmed.split("\\s+", 2);
+        String keyword = parts[0].toLowerCase();
+        String rest = (parts.length > 1) ? parts[1].trim() : "";
+
+        // aliases
+        if (keyword.equals(Commands.TODO_ALIAS)) {
+            keyword = Commands.TODO;
+        } else if (keyword.equals(Commands.MARK_ALIAS)) {
+            keyword = Commands.MARK;
+        } else if (keyword.equals(Commands.UNMARK_ALIAS)) {
+            keyword = Commands.UNMARK;
+        } else if (keyword.equals(Commands.DELETE_ALIAS))   {
+            keyword = Commands.DELETE;
+        } else if (keyword.equals(Commands.DEADLINE_ALIAS)) {
+            keyword = Commands.DEADLINE;
+        } else if (keyword.equals(Commands.EVENT_ALIAS)) {
+            keyword = Commands.EVENT;
+        } else if (keyword.equals(Commands.FIND_ALIAS)) {
+            keyword = Commands.FIND;
+        } else if (keyword.equals(Commands.SAVE_ALIAS)) {
+            keyword = Commands.SAVE;
+        } else if (keyword.equals(Commands.LIST_ALIAS)) {
+            keyword = Commands.LIST;
+        } else if (keyword.equals(Commands.BYE_ALIAS)) {
+            keyword = Commands.BYE;
+        }
+
+        Command cmd;
+        switch (keyword) {
+            case Commands.BYE:
+                cmd = new ByeCommand();
+                break;
+            case Commands.LIST:
+                cmd = new ListCommand();
+                break;
+            case Commands.SAVE:
+                cmd = new SaveCommand();
+                break;
+            case Commands.TODO:
+                cmd = new AddTodoCommand(rest);
+                break;
+            case Commands.DEADLINE:
+                cmd = AddDeadlineCommand.from(rest);
+                break;
+            case Commands.EVENT:
+                cmd = AddEventCommand.from(rest);
+                break;
+            case Commands.MARK:
+                cmd = new MarkCommand(rest, tasks.getSize());
+                break;
+            case Commands.UNMARK:
+                cmd = new UnmarkCommand(rest, tasks.getSize());
+                break;
+            case Commands.DELETE:
+                cmd = new DeleteCommand(rest, tasks.getSize());
+                break;
+            case Commands.FIND:
+                cmd = new FindCommand(rest);
+                break;
+            default: throw new UnknownCommandException();
+        }
+
+        if (cmd.isExit()) {
             storage.save(tasks.toList());
             ui.showGoodbye();
             return true;
-        } else if (cmd.equals(Commands.LIST)) {
-            ui.showMessage(tasks.listAsString());
-            return false;
-        } else if (cmd.startsWith(Commands.MARK)) {
-            int idx = Integer.parseInt(cmd.substring(5).trim());
-            Task t = tasks.get(idx);
-            t.markAsDone();
-            ui.showMessage("Nice! I've marked this task as done:\n  " + t);
-            return false;
-        } else if (cmd.startsWith(Commands.UNMARK)) {
-            int idx = Integer.parseInt(cmd.substring(7).trim());
-            Task t = tasks.get(idx);
-            t.unmark();
-            ui.showMessage("OK, I've marked this task as not done yet:\n  " + t);
-            return false;
-        } else if (cmd.startsWith(Commands.DELETE)) {
-            int idx = Integer.parseInt(cmd.substring(7).trim());
-            Task removed = tasks.delete(idx);
-            ui.showMessage("Noted. I've removed this task:\n  " + removed + "\nNow you have " + tasks.getSize() + " tasks in the list.");
-            return false;
-        } else if (cmd.startsWith(Commands.TODO)) {
-            String desc = cmd.length() > 4 ? cmd.substring(4).trim() : "";
-            if (desc.isEmpty()) {
-                throw new EmptyDescriptionException("todo");
-            }
-            Task t = new Todo(desc);
-            tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
-            return false;
-        } else if (cmd.startsWith(Commands.DEADLINE)) {
-            String rest = cmd.substring("deadline".length()).trim();
-            int byIdx = rest.lastIndexOf("/by");
-            if (byIdx < 0) {
-                throw new BuddyException("Usage: deadline <desc> /by <date>");
-            }
-            String desc = rest.substring(0, byIdx).trim();
-            String by = rest.substring(byIdx + 3).trim();
-            if (desc.isEmpty()) {
-                throw new EmptyDescriptionException("deadline");
-            }
-            if (by.isEmpty()) {
-                throw new BuddyException("Deadline date is missing. Usage: deadline <desc> /by <date>");
-            }
-            Task t = new Deadline(desc, by);
-            tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
-            return false;
-        } else if (cmd.startsWith(Commands.EVENT)) {
-            String rest = cmd.substring("event".length()).trim();
-            int fromIdx = rest.lastIndexOf("/from");
-            int toIdx = rest.lastIndexOf("/to");
-            if (fromIdx < 0 || toIdx < 0 || toIdx < fromIdx) {
-                throw new BuddyException("Usage: event <desc> /from <from> /to <to>");
-            }
-            String desc = rest.substring(0, fromIdx).trim();
-            String from = rest.substring(fromIdx + 5, toIdx).trim();
-            String to = rest.substring(toIdx + 3).trim();
-            if (desc.isEmpty()) {
-                throw new EmptyDescriptionException("event");
-            }
-            if (from.isEmpty()) {
-                throw new BuddyException("Event start time is missing. Usage: event <desc> /from <from> /to <to>");
-            }
-            if (to.isEmpty()) {
-                throw new BuddyException("Event end time is missing. Usage: event <desc> /from <from> /to <to>");
-            }
-            Task t = new Event(desc, from, to);
-            tasks.add(t);
-            ui.showMessage("Got it. I've added this task:\n  " + t + "\nNow you have " + tasks.getSize() + " tasks in the list.");
-            return false;
-        } else if (cmd.equals(Commands.SAVE)) {
-            storage.save(tasks.toList());
-            ui.showMessage("Saved.");
-            return false;
-        } else if (cmd.startsWith(Commands.FIND)) {
-            String keyword = cmd.substring("find".length()).trim();
-            if (keyword.isEmpty()) {
-                throw new BuddyException("Usage: find <keyword>");
-            }
-            ui.showMessage(tasks.findAsString(keyword));
-            return false;
         } else {
-            throw new UnknownCommandException();
+            cmd.execute(tasks, ui, storage);
+            return false;
         }
-
     }
 }

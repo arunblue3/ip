@@ -1,7 +1,8 @@
-T | 0 | hello
-T | 0 | sdsa
-D | 0 | fff | 1212-02-02
 E | 0 | proj meeting | dwjfw-dsnfkjds
 D | 0 | frfrf | 2121-02-02
 T | 0 | dsnslkfds
 D | 1 | q | 1212-02-02
+T | 0 | asds
+T | 0 | d
+D | 0 | sad | 2323-02-23
+E | 0 | proj | sd-sds
