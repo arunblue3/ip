@@ -1,6 +1,6 @@
 # Buddy User Guide
 
-![Buddy GUI (full window)](docs/Ui.png)
+![Buddy GUI (full window)](Ui.png)
 
 Buddy is your very own personal task assistant. 
 
