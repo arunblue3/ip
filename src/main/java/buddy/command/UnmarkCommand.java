@@ -30,7 +30,7 @@ public final class UnmarkCommand implements Command {
         } catch (NumberFormatException e) {
             throw new BuddyException("Please provide a valid positive task number.");
         }
-        if (idx < 0 || idx >= size) {
+        if (idx < 1 || idx > size) {
             throw new BuddyException("No such task number.");
         }
         return idx;
