@@ -7,6 +7,7 @@ import buddy.command.ByeCommand;
 import buddy.command.Command;
 import buddy.command.DeleteCommand;
 import buddy.command.FindCommand;
+import buddy.command.HelpCommand;
 import buddy.command.ListCommand;
 import buddy.command.MarkCommand;
 import buddy.command.SaveCommand;
@@ -42,12 +43,12 @@ public class Parser {
             return false;
         }
 
-        // Split once: <keyword> <rest...>
+        // Split into keyword & rest
         String[] parts = trimmed.split("\\s+", 2);
         String keyword = parts[0].toLowerCase();
         String rest = (parts.length > 1) ? parts[1].trim() : "";
 
-        // aliases
+        // Aliases
         if (keyword.equals(Commands.TODO_ALIAS)) {
             keyword = Commands.TODO;
         } else if (keyword.equals(Commands.MARK_ALIAS)) {
@@ -68,6 +69,8 @@ public class Parser {
             keyword = Commands.LIST;
         } else if (keyword.equals(Commands.BYE_ALIAS)) {
             keyword = Commands.BYE;
+        } else if (keyword.equals(Commands.HELP_ALIAS)) {
+            keyword = Commands.HELP;
         }
 
         Command cmd;
@@ -101,6 +104,9 @@ public class Parser {
                 break;
             case Commands.FIND:
                 cmd = new FindCommand(rest);
+                break;
+            case Commands.HELP:
+                cmd = new HelpCommand();
                 break;
             default: throw new UnknownCommandException();
         }

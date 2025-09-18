@@ -15,6 +15,8 @@ public final class Commands {
     public static final String DELETE   = "delete";
     public static final String FIND     = "find";
     public static final String SAVE     = "save";
+    public static final String HELP     = "help";
+
 
     // aliases
 
@@ -28,5 +30,7 @@ public final class Commands {
     public static final String DELETE_ALIAS   = "rm";
     public static final String FIND_ALIAS     = "f";
     public static final String SAVE_ALIAS     = "s";
+    public static final String HELP_ALIAS     = "h";
+
 
 }
